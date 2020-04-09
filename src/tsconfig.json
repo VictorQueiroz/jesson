@@ -1,0 +1,10 @@
+{
+    "extends": "../tsconfig.default.json",
+    "compilerOptions": {
+        "declaration": true,
+        "outDir": "../lib",
+        "sourceMap": true,
+        "isolatedModules": true,
+        "rootDir": "../src"
+    }
+}
