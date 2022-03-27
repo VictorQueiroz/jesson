@@ -1,7 +1,14 @@
-import * as fs from 'fs';
+import fs from 'fs';
 import {Suite} from 'sarg';
 import {expect} from 'chai';
-import {Parser, Stringifier, Tokenizer, INodeObject, NodeType, JSON as JESSON} from '../src';
+import {
+    Parser,
+    Stringifier,
+    Tokenizer,
+    INodeObject,
+    NodeType,
+    JSON as JESSON
+} from '../src';
 
 const suite = new Suite();
 const {test} = suite;
@@ -82,6 +89,11 @@ test('it should not stringify cyclic objects', () => {
     const value2: any = {};
     value2.value = value2;
     expect(() => JESSON.stringify(value2)).to.throws('detected cyclic object');
+
+    const value3: any = {};
+    const list = [value3];
+    value3.value = list;
+    expect(() => JESSON.stringify(list)).to.throws('detected cyclic object');
 })
 
 test('it should parse normal-length integers', () => {
