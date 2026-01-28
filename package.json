@@ -15,7 +15,7 @@
     "README.md"
   ],
   "scripts": {
-    "prepublishOnly": "npm run test:coverage && npm run build",
+    "prepublishOnly": "npm run build && npm run test:coverage",
     "test": "ava",
     "test:coverage": "c8 --reporter=text --reporter=lcov ava",
     "build": "tsc -b src",
