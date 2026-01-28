@@ -71,6 +71,26 @@ npm run benchmark
 
 Sample results show native JSON is typically 2-100x faster depending on the operation and data size, which is expected as it's a C++ implementation.
 
+### Performance Profiling
+
+To identify performance bottlenecks and visualize where time is spent:
+
+```bash
+# Generate flame graph visualization
+npm run benchmark:profile
+
+# Generate performance recommendations
+npm run benchmark:doctor
+```
+
+These commands use **[Clinic.js](https://clinicjs.org/)**, a professional Node.js performance profiling tool that generates interactive HTML reports showing:
+- **Flame graphs**: Visual representation of where CPU time is spent
+- **Performance bottlenecks**: Identifies slow functions and call stacks
+- **Optimization opportunities**: Recommendations for improving performance
+
+Reports are saved to the `.clinic/` directory and can be opened in any web browser.
+
+
 ## Development
 
 ```bash

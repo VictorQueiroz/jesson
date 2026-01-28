@@ -4,3 +4,6 @@
 .tsimp
 coverage
 .nyc_output
+
+# Clinic.js profiling output
+.clinic

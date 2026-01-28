@@ -110,3 +110,10 @@ console.log('\n📈 Summary:');
 console.log(`Total tests: ${bench.tasks.length}`);
 console.log(`\nNote: Native JSON is a C++ implementation and will typically be faster.`);
 console.log(`JESSON is written in TypeScript for learning/demonstration purposes.`);
+
+console.log('\n🔍 Performance Analysis:');
+console.log('To visualize performance bottlenecks, run:');
+console.log('  npm run benchmark:profile  - Generates flame graph visualization');
+console.log('  npm run benchmark:doctor   - Generates performance recommendations');
+console.log('\nVisualization reports will be saved to .clinic/ directory as HTML files.');
+
