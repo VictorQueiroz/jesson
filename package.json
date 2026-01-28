@@ -16,8 +16,8 @@
   ],
   "scripts": {
     "prepublishOnly": "npm run build && npm run test:coverage",
-    "test": "ava",
-    "test:coverage": "c8 --reporter=text --reporter=lcov ava",
+    "test": "tsx node_modules/.bin/ava",
+    "test:coverage": "c8 --reporter=text --reporter=lcov -- tsx node_modules/.bin/ava",
     "build": "tsc -b src",
     "benchmark": "tsx benchmark/index.ts",
     "benchmark:profile": "clinic flame -- node benchmark/profile.js",
@@ -54,9 +54,6 @@
     "extensions": {
       "ts": "module"
     },
-    "nodeArguments": [
-      "--import=tsx/esm"
-    ],
     "files": [
       "test/**/*.test.ts"
     ]
