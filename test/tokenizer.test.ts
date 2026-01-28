@@ -1,146 +1,132 @@
-import {expect} from 'chai';
-import {Character, Tokenizer, TokenType} from '../src/index.js';
+import test from 'ava';
+import {Character, Tokenizer, TokenType} from '../build/src/index.js';
 
-describe('Character Class', () => {
-    describe('isPunctuator', () => {
-        it('should identify { } [ ] : , as punctuators', () => {
-            expect(Character.isPunctuator(123)).to.be.true; // {
-            expect(Character.isPunctuator(125)).to.be.true; // }
-            expect(Character.isPunctuator(91)).to.be.true; // [
-            expect(Character.isPunctuator(93)).to.be.true; // ]
-            expect(Character.isPunctuator(58)).to.be.true; // :
-            expect(Character.isPunctuator(44)).to.be.true; // ,
-        });
-
-        it('should return false for non-punctuator characters', () => {
-            expect(Character.isPunctuator(65)).to.be.false; // A
-            expect(Character.isPunctuator(48)).to.be.false; // 0
-            expect(Character.isPunctuator(32)).to.be.false; // space
-        });
-    });
-
-    describe('isIdentifier', () => {
-        it('should identify A-Z and a-z as identifiers', () => {
-            expect(Character.isIdentifier(65)).to.be.true; // A
-            expect(Character.isIdentifier(90)).to.be.true; // Z
-            expect(Character.isIdentifier(97)).to.be.true; // a
-            expect(Character.isIdentifier(122)).to.be.true; // z
-        });
-
-        it('should return false for non-identifier characters', () => {
-            expect(Character.isIdentifier(48)).to.be.false; // 0
-            expect(Character.isIdentifier(32)).to.be.false; // space
-        });
-    });
-
-    describe('isStringStart', () => {
-        it('should identify " as string start', () => {
-            expect(Character.isStringStart(34)).to.be.true; // "
-        });
-
-        it('should return false for other characters', () => {
-            expect(Character.isStringStart(39)).to.be.false; // '
-            expect(Character.isStringStart(65)).to.be.false; // A
-        });
-    });
-
-    describe('isInteger', () => {
-        it('should identify 0-9 as integers', () => {
-            expect(Character.isInteger(48)).to.be.true; // 0
-            expect(Character.isInteger(57)).to.be.true; // 9
-        });
-
-        it('should return false for non-integer characters', () => {
-            expect(Character.isInteger(65)).to.be.false; // A
-            expect(Character.isInteger(32)).to.be.false; // space
-        });
-    });
-
-    describe('isIntegerStart', () => {
-        it('should identify - and 0-9 as integer start', () => {
-            expect(Character.isIntegerStart(45)).to.be.true; // -
-            expect(Character.isIntegerStart(48)).to.be.true; // 0
-            expect(Character.isIntegerStart(57)).to.be.true; // 9
-        });
-
-        it('should return false for other characters', () => {
-            expect(Character.isIntegerStart(65)).to.be.false; // A
-        });
-    });
+test('Character.isPunctuator - should identify { } [ ] : , as punctuators', t => {
+    t.true(Character.isPunctuator(123)); // {
+    t.true(Character.isPunctuator(125)); // }
+    t.true(Character.isPunctuator(91)); // [
+    t.true(Character.isPunctuator(93)); // ]
+    t.true(Character.isPunctuator(58)); // :
+    t.true(Character.isPunctuator(44)); // ,
 });
 
-describe('Tokenizer', () => {
-    it('should tokenize empty object', () => {
-        const tokens = new Tokenizer('{}').tokenize();
-        expect(tokens).to.have.lengthOf(2);
-        expect(tokens[0]).to.deep.equal({type: TokenType.Punctuator, value: '{'});
-        expect(tokens[1]).to.deep.equal({type: TokenType.Punctuator, value: '}'});
-    });
+test('Character.isPunctuator - should return false for non-punctuator characters', t => {
+    t.false(Character.isPunctuator(65)); // A
+    t.false(Character.isPunctuator(48)); // 0
+    t.false(Character.isPunctuator(32)); // space
+});
 
-    it('should tokenize empty array', () => {
-        const tokens = new Tokenizer('[]').tokenize();
-        expect(tokens).to.have.lengthOf(2);
-        expect(tokens[0]).to.deep.equal({type: TokenType.Punctuator, value: '['});
-        expect(tokens[1]).to.deep.equal({type: TokenType.Punctuator, value: ']'});
-    });
+test('Character.isIdentifier - should identify A-Z and a-z as identifiers', t => {
+    t.true(Character.isIdentifier(65)); // A
+    t.true(Character.isIdentifier(90)); // Z
+    t.true(Character.isIdentifier(97)); // a
+    t.true(Character.isIdentifier(122)); // z
+});
 
-    it('should tokenize boolean keywords', () => {
-        const tokens = new Tokenizer('true false').tokenize();
-        expect(tokens).to.have.lengthOf(2);
-        expect(tokens[0]).to.deep.equal({type: TokenType.Keyword, value: 'true'});
-        expect(tokens[1]).to.deep.equal({type: TokenType.Keyword, value: 'false'});
-    });
+test('Character.isIdentifier - should return false for non-identifier characters', t => {
+    t.false(Character.isIdentifier(48)); // 0
+    t.false(Character.isIdentifier(32)); // space
+});
 
-    it('should tokenize null keyword', () => {
-        const tokens = new Tokenizer('null').tokenize();
-        expect(tokens).to.have.lengthOf(1);
-        expect(tokens[0]).to.deep.equal({type: TokenType.Keyword, value: 'null'});
-    });
+test('Character.isStringStart - should identify " as string start', t => {
+    t.true(Character.isStringStart(34)); // "
+});
 
-    it('should tokenize strings with escaped quotes', () => {
-        const tokens = new Tokenizer('"hello \\"world\\""').tokenize();
-        expect(tokens).to.have.lengthOf(1);
-        expect(tokens[0]).to.deep.equal({type: TokenType.String, value: 'hello \\"world\\"'});
-    });
+test('Character.isStringStart - should return false for other characters', t => {
+    t.false(Character.isStringStart(39)); // '
+    t.false(Character.isStringStart(65)); // A
+});
 
-    it('should tokenize positive integers', () => {
-        const tokens = new Tokenizer('123').tokenize();
-        expect(tokens).to.have.lengthOf(1);
-        expect(tokens[0]).to.deep.equal({type: TokenType.Integer, value: 123});
-    });
+test('Character.isInteger - should identify 0-9 as integers', t => {
+    t.true(Character.isInteger(48)); // 0
+    t.true(Character.isInteger(57)); // 9
+});
 
-    it('should tokenize negative integers', () => {
-        const tokens = new Tokenizer('-456').tokenize();
-        expect(tokens).to.have.lengthOf(1);
-        expect(tokens[0]).to.deep.equal({type: TokenType.Integer, value: -456});
-    });
+test('Character.isInteger - should return false for non-integer characters', t => {
+    t.false(Character.isInteger(65)); // A
+    t.false(Character.isInteger(32)); // space
+});
 
-    it('should tokenize float numbers', () => {
-        const tokens = new Tokenizer('3.14').tokenize();
-        expect(tokens).to.have.lengthOf(1);
-        expect(tokens[0].type).to.equal(TokenType.Float);
-    });
+test('Character.isIntegerStart - should identify - and 0-9 as integer start', t => {
+    t.true(Character.isIntegerStart(45)); // -
+    t.true(Character.isIntegerStart(48)); // 0
+    t.true(Character.isIntegerStart(57)); // 9
+});
 
-    it('should tokenize big integers', () => {
-        const tokens = new Tokenizer('12345678901234567890').tokenize();
-        expect(tokens).to.have.lengthOf(1);
-        expect(tokens[0]).to.deep.equal({type: TokenType.BigInt, value: 12345678901234567890n});
-    });
+test('Character.isIntegerStart - should return false for other characters', t => {
+    t.false(Character.isIntegerStart(65)); // A
+});
 
-    it('should tokenize complex JSON', () => {
-        const tokens = new Tokenizer('{"key":"value","num":42}').tokenize();
-        expect(tokens.length).to.be.greaterThan(0);
-        expect(tokens[0]).to.deep.equal({type: TokenType.Punctuator, value: '{'});
-    });
+test('Tokenizer - should tokenize empty object', t => {
+    const tokens = new Tokenizer('{}').tokenize();
+    t.is(tokens.length, 2);
+    t.deepEqual(tokens[0], {type: TokenType.Punctuator, value: '{'});
+    t.deepEqual(tokens[1], {type: TokenType.Punctuator, value: '}'});
+});
 
-    it('should skip whitespace and newlines', () => {
-        const tokens = new Tokenizer('  {\n  }  ').tokenize();
-        expect(tokens).to.have.lengthOf(2);
-        expect(tokens[0]).to.deep.equal({type: TokenType.Punctuator, value: '{'});
-        expect(tokens[1]).to.deep.equal({type: TokenType.Punctuator, value: '}'});
-    });
+test('Tokenizer - should tokenize empty array', t => {
+    const tokens = new Tokenizer('[]').tokenize();
+    t.is(tokens.length, 2);
+    t.deepEqual(tokens[0], {type: TokenType.Punctuator, value: '['});
+    t.deepEqual(tokens[1], {type: TokenType.Punctuator, value: ']'});
+});
 
-    it('should throw error on invalid keyword', () => {
-        expect(() => new Tokenizer('invalid').tokenize()).to.throw();
-    });
+test('Tokenizer - should tokenize boolean keywords', t => {
+    const tokens = new Tokenizer('true false').tokenize();
+    t.is(tokens.length, 2);
+    t.deepEqual(tokens[0], {type: TokenType.Keyword, value: 'true'});
+    t.deepEqual(tokens[1], {type: TokenType.Keyword, value: 'false'});
+});
+
+test('Tokenizer - should tokenize null keyword', t => {
+    const tokens = new Tokenizer('null').tokenize();
+    t.is(tokens.length, 1);
+    t.deepEqual(tokens[0], {type: TokenType.Keyword, value: 'null'});
+});
+
+test('Tokenizer - should tokenize strings with escaped quotes', t => {
+    const tokens = new Tokenizer('"hello \\"world\\""').tokenize();
+    t.is(tokens.length, 1);
+    t.deepEqual(tokens[0], {type: TokenType.String, value: 'hello \\"world\\"'});
+});
+
+test('Tokenizer - should tokenize positive integers', t => {
+    const tokens = new Tokenizer('123').tokenize();
+    t.is(tokens.length, 1);
+    t.deepEqual(tokens[0], {type: TokenType.Integer, value: 123});
+});
+
+test('Tokenizer - should tokenize negative integers', t => {
+    const tokens = new Tokenizer('-456').tokenize();
+    t.is(tokens.length, 1);
+    t.deepEqual(tokens[0], {type: TokenType.Integer, value: -456});
+});
+
+test('Tokenizer - should tokenize float numbers', t => {
+    const tokens = new Tokenizer('3.14').tokenize();
+    t.is(tokens.length, 1);
+    t.is(tokens[0].type, TokenType.Float);
+});
+
+test('Tokenizer - should tokenize big integers', t => {
+    const tokens = new Tokenizer('12345678901234567890').tokenize();
+    t.is(tokens.length, 1);
+    t.deepEqual(tokens[0], {type: TokenType.BigInt, value: 12345678901234567890n});
+});
+
+test('Tokenizer - should tokenize complex JSON', t => {
+    const tokens = new Tokenizer('{"key":"value","num":42}').tokenize();
+    t.true(tokens.length > 0);
+    t.deepEqual(tokens[0], {type: TokenType.Punctuator, value: '{'});
+});
+
+test('Tokenizer - should skip whitespace and newlines', t => {
+    const tokens = new Tokenizer('  {\n  }  ').tokenize();
+    t.is(tokens.length, 2);
+    t.deepEqual(tokens[0], {type: TokenType.Punctuator, value: '{'});
+    t.deepEqual(tokens[1], {type: TokenType.Punctuator, value: '}'});
+});
+
+test('Tokenizer - should throw error on invalid keyword', t => {
+    t.throws(() => new Tokenizer('invalid').tokenize());
 });

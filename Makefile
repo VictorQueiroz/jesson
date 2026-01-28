@@ -1,4 +1,4 @@
 test:
-	npm exec -- mocha --require tsx/cjs test/**/*.test.ts
+	npm exec -- ava
 
 .PHONY: test

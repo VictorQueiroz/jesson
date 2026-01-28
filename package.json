@@ -16,7 +16,7 @@
   ],
   "scripts": {
     "prepublishOnly": "npm exec -- tsc -b src",
-    "test": "make test",
+    "test": "ava",
     "build": "tsc -b src",
     "benchmark": "tsx benchmark/index.ts"
   },
@@ -33,11 +33,8 @@
   "author": "Victor Queiroz",
   "license": "MIT",
   "devDependencies": {
-    "@types/chai": "4.x",
-    "@types/mocha": "^10.0.10",
     "@types/node": "22.x",
-    "chai": "4.x",
-    "mocha": "^11.7.5",
+    "ava": "^6.4.1",
     "nyc": "15.x",
     "sarg": "4.x",
     "tinybench": "^2.9.0",
@@ -49,5 +46,16 @@
   },
   "engines": {
     "node": ">=18"
+  },
+  "ava": {
+    "extensions": {
+      "ts": "module"
+    },
+    "nodeArguments": [
+      "--import=tsx/esm"
+    ],
+    "files": [
+      "test/**/*.test.ts"
+    ]
   }
 }
