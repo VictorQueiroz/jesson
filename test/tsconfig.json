@@ -2,7 +2,11 @@
     "extends": "../tsconfig.base.json",
     "compilerOptions": {
         "target": "ESNext",
-        "module": "CommonJS",
+        "module": "ESNext",
         "lib": ["ESNext"]
+    },
+    "ts-node": {
+        "esm": true,
+        "experimentalSpecifierResolution": "node"
     }
 }

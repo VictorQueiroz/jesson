@@ -1,8 +1,4 @@
 test:
-	TS_NODE_PROJECT=test/tsconfig.json \
-		npx sarg \
-		--bail \
-		--require ts-node/register \
-		"test/**/*.ts"
+	npm exec -- mocha --require tsx/cjs test/**/*.test.ts
 
 .PHONY: test

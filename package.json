@@ -1,24 +1,53 @@
 {
+  "name": "jesson",
+  "version": "0.0.11",
+  "description": "A JSON parser and stringifier",
+  "type": "module",
+  "main": "./build/src/index.js",
+  "exports": {
+    ".": {
+      "import": "./build/src/index.js",
+      "types": "./build/src/index.d.ts"
+    }
+  },
+  "files": [
+    "build/src/**/*.{js,d.ts,map}",
+    "README.md"
+  ],
+  "scripts": {
+    "prepublishOnly": "npm exec -- tsc -b src",
+    "test": "make test",
+    "build": "tsc -b src",
+    "benchmark": "tsx benchmark/index.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/VictorQueiroz/jesson.git"
+  },
+  "keywords": [
+    "json",
+    "parser",
+    "stringifier",
+    "bigint"
+  ],
+  "author": "Victor Queiroz",
+  "license": "MIT",
   "devDependencies": {
     "@types/chai": "4.x",
-    "@types/node": "16.x",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "22.x",
     "chai": "4.x",
+    "mocha": "^11.7.5",
     "nyc": "15.x",
     "sarg": "4.x",
-    "ts-node": "10.x",
-    "typescript": "4.x"
+    "tinybench": "^2.9.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
   },
-  "scripts": {
-    "prepublishOnly": "npx tsc -b src"
-  },
-  "dependencies": {},
-  "version": "0.0.11",
-  "main": "./build/src/index.js",
-  "files": [
-    "build/**/*.{js,d.ts,map}"
-  ],
-  "name": "jesson",
   "peerDependencies": {
     "tslib": "2.x"
+  },
+  "engines": {
+    "node": ">=18"
   }
 }
