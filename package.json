@@ -15,8 +15,9 @@
     "README.md"
   ],
   "scripts": {
-    "prepublishOnly": "npm exec -- tsc -b src",
+    "prepublishOnly": "npm run test:coverage && npm run build",
     "test": "ava",
+    "test:coverage": "c8 --reporter=text --reporter=lcov ava",
     "build": "tsc -b src",
     "benchmark": "tsx benchmark/index.ts"
   },
@@ -35,8 +36,7 @@
   "devDependencies": {
     "@types/node": "22.x",
     "ava": "^6.4.1",
-    "nyc": "15.x",
-    "sarg": "4.x",
+    "c8": "^10.1.3",
     "tinybench": "^2.9.0",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2"
@@ -56,6 +56,23 @@
     ],
     "files": [
       "test/**/*.test.ts"
+    ]
+  },
+  "c8": {
+    "all": true,
+    "include": [
+      "build/src/**/*.js"
+    ],
+    "exclude": [
+      "build/test/**",
+      "build/benchmark/**",
+      "test/**",
+      "benchmark/**"
+    ],
+    "reporter": [
+      "text",
+      "lcov",
+      "html"
     ]
   }
 }

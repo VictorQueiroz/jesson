@@ -2,3 +2,5 @@
 /.history
 /build
 .tsimp
+coverage
+.nyc_output
