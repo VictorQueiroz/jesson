@@ -1,24 +1,73 @@
 {
-  "devDependencies": {
-    "@types/chai": "4.x",
-    "@types/node": "16.x",
-    "chai": "4.x",
-    "nyc": "15.x",
-    "sarg": "4.x",
-    "ts-node": "10.x",
-    "typescript": "4.x"
-  },
-  "scripts": {
-    "prepublishOnly": "npx tsc -b src"
-  },
-  "dependencies": {},
-  "version": "0.0.11",
-  "main": "./build/src/index.js",
-  "files": [
-    "build/**/*.{js,d.ts,map}"
-  ],
   "name": "jesson",
+  "version": "0.0.11",
+  "description": "A JSON parser and stringifier",
+  "type": "module",
+  "main": "./build/src/index.js",
+  "exports": {
+    ".": {
+      "import": "./build/src/index.js",
+      "types": "./build/src/index.d.ts"
+    }
+  },
+  "files": [
+    "build/src/**/*.{js,d.ts,map}",
+    "README.md"
+  ],
+  "scripts": {
+    "prepublishOnly": "npm run build && npm run test:coverage",
+    "test": "mocha --require tsx/cjs test/**/*.test.ts",
+    "test:coverage": "c8 --reporter=text --reporter=lcov -- mocha --require tsx/cjs test/**/*.test.ts",
+    "build": "tsc -b src",
+    "benchmark": "tsx benchmark/index.ts",
+    "benchmark:profile": "clinic flame -- node benchmark/profile.js",
+    "benchmark:doctor": "clinic doctor -- node benchmark/profile.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/VictorQueiroz/jesson.git"
+  },
+  "keywords": [
+    "json",
+    "parser",
+    "stringifier",
+    "bigint"
+  ],
+  "author": "Victor Queiroz",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/chai": "^5.0.1",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "22.x",
+    "c8": "^10.1.3",
+    "chai": "^5.1.2",
+    "clinic": "^13.0.0",
+    "mocha": "^11.0.1",
+    "tinybench": "^2.9.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  },
   "peerDependencies": {
     "tslib": "2.x"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "c8": {
+    "all": true,
+    "include": [
+      "build/src/**/*.js"
+    ],
+    "exclude": [
+      "build/test/**",
+      "build/benchmark/**",
+      "test/**",
+      "benchmark/**"
+    ],
+    "reporter": [
+      "text",
+      "lcov",
+      "html"
+    ]
   }
 }

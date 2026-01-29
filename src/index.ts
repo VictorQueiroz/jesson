@@ -286,7 +286,6 @@ export class Parser {
                     throw new Error(`Invalid keyword: ${token.value}`)
             };
         }
-        console.log(token);
         throw new Error(`Invalid token: ${JSON.stringify(this.token())}`);
     }
     private integer(): INodeBigInt | INodeFloat | INodeInteger {

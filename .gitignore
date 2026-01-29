@@ -1,3 +1,9 @@
 /node_modules
 /.history
 /build
+.tsimp
+coverage
+.nyc_output
+
+# Clinic.js profiling output
+.clinic
