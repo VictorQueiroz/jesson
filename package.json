@@ -1,6 +1,6 @@
 {
   "name": "jesson",
-  "version": "0.0.11",
+  "version": "1.0.0",
   "description": "A JSON parser and stringifier",
   "type": "module",
   "main": "./build/src/index.js",
