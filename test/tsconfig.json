@@ -1,12 +1,10 @@
 {
     "extends": "../tsconfig.base.json",
     "compilerOptions": {
-        "target": "ESNext",
-        "module": "ESNext",
-        "lib": ["ESNext"]
-    },
-    "ts-node": {
-        "esm": true,
-        "experimentalSpecifierResolution": "node"
+        "target": "ES2022",
+        "module": "ES2022",
+        "lib": ["ES2022"],
+        "noUnusedLocals": false,
+        "noUnusedParameters": false
     }
 }

@@ -1,5 +1,6 @@
 import fs from 'fs';
-import test from 'ava';
+import { describe, it } from 'mocha';
+import { expect } from 'chai';
 import {
     Parser,
     Stringifier,
@@ -14,7 +15,8 @@ import { dirname } from 'path';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-test('should parse JSON string with big integers', t => {
+describe('json', () => {
+it('should parse JSON string with big integers', () => {
     const node = new Parser(new Tokenizer('{"a": 11252353308968154646}').tokenize()).parse();
     const expectedNode: INodeObject = {
         type: NodeType.Object,
@@ -32,10 +34,10 @@ test('should parse JSON string with big integers', t => {
             }
         ]
     };
-    t.deepEqual(node, expectedNode);
+    expect(node).to.deep.equal(expectedNode);
 });
 
-test('should parse float numbers', t => {
+it('should parse float numbers', () => {
     const node = new Parser(new Tokenizer('{"a": 1.7976931348623157}').tokenize()).parse();
     const expectedNode: INodeObject = {
         type: NodeType.Object,
@@ -53,53 +55,49 @@ test('should parse float numbers', t => {
             }
         ]
     };
-    t.deepEqual(node, expectedNode);
+    expect(node).to.deep.equal(expectedNode);
 });
 
-test('should stringify nodes', t => {
+it('should stringify nodes', () => {
     let node = new Parser(new Tokenizer('{"a": 4294967296}').tokenize()).parse();
-    t.is(new Stringifier(node).stringify(), '{"a":4294967296}');
-
-    node = new Parser(new Tokenizer('{"a": 1.7976931348623157}').tokenize()).parse();
+    expect(new Stringifier(node).stringify()).to.equal('{"a":4294967296}');
 
     node = new Parser(new Tokenizer('{"a": 5366794105309385834}').tokenize()).parse();
-    t.is(new Stringifier(node).stringify(), '{"a":5366794105309385834}');
+    expect(new Stringifier(node).stringify()).to.equal('{"a":5366794105309385834}');
 });
 
-test('should parse null type', t => {
+it('should parse null type', () => {
     let node = new Parser(new Tokenizer('{"a": null}').tokenize()).parse();
-    t.is(new Stringifier(node).stringify(), '{"a":null}');
+    expect(new Stringifier(node).stringify()).to.equal('{"a":null}');
 });
 
-test('should stringify number', t => {
-    t.is(JESSON.stringify({
+it('should stringify number', () => {
+    expect(JESSON.stringify({
         id: 1000000,
         name: 'Title'
-    }), '{"id":1000000,"name":"Title"}');
+    })).to.equal('{"id":1000000,"name":"Title"}');
 });
 
-test('should not stringify cyclic objects', t => {
+it('should not stringify cyclic objects', () => {
     const value = {};
-    t.is(JESSON.stringify({
+    expect(JESSON.stringify({
         value: {
             value1: value,
             value2: value
         }
-    }), '{"value":{"value1":{},"value2":{}}}');
+    })).to.equal('{"value":{"value1":{},"value2":{}}}');
 
     const value2: any = {};
     value2.value = value2;
-    const error = t.throws(() => JESSON.stringify(value2));
-    t.is(error?.message, 'detected cyclic object');
+    expect(() => JESSON.stringify(value2)).to.throw('detected cyclic object');
 
     const value3: any = {};
     const list = [value3];
     value3.value = list;
-    const error2 = t.throws(() => JESSON.stringify(list));
-    t.is(error2?.message, 'detected cyclic object');
+    expect(() => JESSON.stringify(list)).to.throw('detected cyclic object');
 });
 
-test('should parse normal-length integers', t => {
+it('should parse normal-length integers', () => {
     const node = new Parser(new Tokenizer('{"a": 4294967296}').tokenize()).parse();
     const expectedNode: INodeObject = {
         type: NodeType.Object,
@@ -117,10 +115,10 @@ test('should parse normal-length integers', t => {
             }
         ]
     };
-    t.deepEqual(node, expectedNode);
+    expect(node).to.deep.equal(expectedNode);
 });
 
-test('should handle negative integers', t => {
+it('should handle negative integers', () => {
     const obj1: INodeObject = {
         type: NodeType.Object,
         body: [
@@ -148,28 +146,29 @@ test('should handle negative integers', t => {
             }
         ]
     };
-    t.deepEqual(new Parser(new Tokenizer('{"a":-20000,"b":-7439353655660881559}').tokenize()).parse(), obj1);
-    t.deepEqual(JESSON.parse('{"a":-20000,"b":-7439353655660881559}'), {
+    expect(new Parser(new Tokenizer('{"a":-20000,"b":-7439353655660881559}').tokenize()).parse()).to.deep.equal(obj1);
+    expect(JESSON.parse('{"a":-20000,"b":-7439353655660881559}')).to.deep.equal({
         a: -20000,
         b: -7439353655660881559n
     });
 });
 
-test('should escape strings with "" content', t => {
-    t.is(JESSON.stringify({
+it('should escape strings with "" content', () => {
+    expect(JESSON.stringify({
         value: 'Hey. This content has a "quotation" part'
-    }), '{"value":"Hey. This content has a \\"quotation\\" part"}');
-    t.deepEqual(JESSON.parse('{"value":"Hey. This content has a \\"quotation\\" part"}'), {
+    })).to.equal('{"value":"Hey. This content has a \\"quotation\\" part"}');
+    expect(JESSON.parse('{"value":"Hey. This content has a \\"quotation\\" part"}')).to.deep.equal({
         value: 'Hey. This content has a "quotation" part'
     });
 });
 
-test('should parse deep objects', async t => {
+it('should parse deep objects', async () => {
     const content = await fs.promises.readFile(__dirname + '/json1.json', 'utf8');
     const stringified = await fs.promises.readFile(__dirname + '/json1.stringified', 'utf8');
     const node = new Parser(new Tokenizer(content).tokenize()).parse();
-    t.is(new Stringifier(node).stringify(), stringified);
-    t.is(new Stringifier(node).stringify(), stringified);
-    t.deepEqual(JESSON.stringify(JSON.parse(content)), JSON.stringify(JSON.parse(content), null, ''))
-    t.deepEqual(JESSON.parse(content), JSON.parse(content))
+    expect(new Stringifier(node).stringify()).to.equal(stringified);
+    expect(new Stringifier(node).stringify()).to.equal(stringified);
+    expect(JESSON.stringify(JSON.parse(content))).to.deep.equal(JSON.stringify(JSON.parse(content), null, ''))
+    expect(JESSON.parse(content)).to.deep.equal(JSON.parse(content))
+});
 });
