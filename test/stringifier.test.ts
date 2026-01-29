@@ -1,24 +1,26 @@
-import test from 'ava';
+import { describe, it } from 'mocha';
+import { expect } from 'chai';
 import {Stringifier, NodeType} from '../build/src/index.js';
 import type {INodeObject, INodeArray} from '../build/src/index.js';
 
-test('should stringify empty object', t => {
+describe('stringifier', () => {
+it('should stringify empty object', () => {
     const node: INodeObject = {
         type: NodeType.Object,
         body: []
     };
-    t.is(new Stringifier(node).stringify(), '{}');
+    expect(new Stringifier(node).stringify()).to.equal('{}');
 });
 
-test('should stringify empty array', t => {
+it('should stringify empty array', () => {
     const node: INodeArray = {
         type: NodeType.Array,
         body: []
     };
-    t.is(new Stringifier(node).stringify(), '[]');
+    expect(new Stringifier(node).stringify()).to.equal('[]');
 });
 
-test('should stringify simple object', t => {
+it('should stringify simple object', () => {
     const node: INodeObject = {
         type: NodeType.Object,
         body: [{
@@ -27,10 +29,10 @@ test('should stringify simple object', t => {
             value: {type: NodeType.String, value: 'test'}
         }]
     };
-    t.is(new Stringifier(node).stringify(), '{"name":"test"}');
+    expect(new Stringifier(node).stringify()).to.equal('{"name":"test"}');
 });
 
-test('should stringify array of numbers', t => {
+it('should stringify array of numbers', () => {
     const node: INodeArray = {
         type: NodeType.Array,
         body: [
@@ -39,35 +41,35 @@ test('should stringify array of numbers', t => {
             {type: NodeType.Integer, value: 3}
         ]
     };
-    t.is(new Stringifier(node).stringify(), '[1,2,3]');
+    expect(new Stringifier(node).stringify()).to.equal('[1,2,3]');
 });
 
-test('should stringify boolean true', t => {
+it('should stringify boolean true', () => {
     const node = {type: NodeType.Boolean, value: true};
-    t.is(new Stringifier(node).stringify(), 'true');
+    expect(new Stringifier(node).stringify()).to.equal('true');
 });
 
-test('should stringify boolean false', t => {
+it('should stringify boolean false', () => {
     const node = {type: NodeType.Boolean, value: false};
-    t.is(new Stringifier(node).stringify(), 'false');
+    expect(new Stringifier(node).stringify()).to.equal('false');
 });
 
-test('should stringify null', t => {
+it('should stringify null', () => {
     const node = {type: NodeType.Null};
-    t.is(new Stringifier(node).stringify(), 'null');
+    expect(new Stringifier(node).stringify()).to.equal('null');
 });
 
-test('should stringify float', t => {
+it('should stringify float', () => {
     const node = {type: NodeType.Float, value: 3.14};
-    t.is(new Stringifier(node).stringify(), '3.14');
+    expect(new Stringifier(node).stringify()).to.equal('3.14');
 });
 
-test('should stringify bigint', t => {
+it('should stringify bigint', () => {
     const node = {type: NodeType.BigInt, value: 9007199254740991n};
-    t.is(new Stringifier(node).stringify(), '9007199254740991');
+    expect(new Stringifier(node).stringify()).to.equal('9007199254740991');
 });
 
-test('should escape quotes in strings', t => {
+it('should escape quotes in strings', () => {
     const node: INodeObject = {
         type: NodeType.Object,
         body: [{
@@ -76,10 +78,10 @@ test('should escape quotes in strings', t => {
             value: {type: NodeType.String, value: 'say "hello"'}
         }]
     };
-    t.true(new Stringifier(node).stringify().includes('\\"'));
+    expect(new Stringifier(node).stringify().includes('\\"')).to.be.true;
 });
 
-test('should stringify nested objects', t => {
+it('should stringify nested objects', () => {
     const node: INodeObject = {
         type: NodeType.Object,
         body: [{
@@ -95,10 +97,10 @@ test('should stringify nested objects', t => {
             }
         }]
     };
-    t.is(new Stringifier(node).stringify(), '{"outer":{"inner":"value"}}');
+    expect(new Stringifier(node).stringify()).to.equal('{"outer":{"inner":"value"}}');
 });
 
-test('should stringify nested arrays', t => {
+it('should stringify nested arrays', () => {
     const node: INodeArray = {
         type: NodeType.Array,
         body: [{
@@ -109,5 +111,6 @@ test('should stringify nested arrays', t => {
             ]
         }]
     };
-    t.is(new Stringifier(node).stringify(), '[[1,2]]');
+    expect(new Stringifier(node).stringify()).to.equal('[[1,2]]');
+});
 });
